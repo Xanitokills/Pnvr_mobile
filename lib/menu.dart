@@ -128,7 +128,8 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                       children: [
                         FadeTransition(
                           opacity: _fadeAnimation,
-                          child: Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
                                 padding: EdgeInsets.all(12),
@@ -142,30 +143,22 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                                   size: 32,
                                 ),
                               ),
-                              SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'PNVR Dashboard',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Sistema de Gestión Integral',
-                                      style: TextStyle(
-                                        color: Colors.white.withOpacity(0.9),
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
+                              SizedBox(height: 16),
+                              Text(
+                                'PNVR Dashboard',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              _buildProfileButton(context),
+                              Text(
+                                'Sistema de Gestión Integral',
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.9),
+                                  fontSize: 16,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -309,47 +302,13 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildProfileButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _showProfileDialog(context),
-      child: Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.white,
-              child: Icon(Icons.person, color: Colors.blue.shade600, size: 20),
-            ),
-            SizedBox(width: 8),
-            Text(
-              'Admin',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-            ),
-            SizedBox(width: 4),
-            Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildQuickActionCard(
     Map<String, dynamic> action,
     BuildContext context,
   ) {
     return Container(
-      width: 120,
-      margin: EdgeInsets.only(right: 16),
+      width: 110,
+      margin: EdgeInsets.only(right: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -367,7 +326,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
           onTap: () => _handleQuickAction(action, context),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -377,16 +336,19 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                     color: action['color'].withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(action['icon'], color: action['color'], size: 24),
+                  child: Icon(action['icon'], color: action['color'], size: 22),
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 6),
                 Text(
                   action['title'],
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: Colors.grey.shade700,
+                    height: 1.2,
                   ),
                 ),
               ],
@@ -444,15 +406,14 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                 ),
                 // Content
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(12),
@@ -460,25 +421,29 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                             child: Icon(
                               module['icon'],
                               color: Colors.white,
-                              size: 28,
+                              size: 24,
                             ),
                           ),
+                          Spacer(),
                           if (!module['available'])
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                'Próximamente',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
+                            Flexible(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  'Próximamente',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
@@ -487,29 +452,38 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin {
                       Spacer(),
                       Text(
                         module['title'],
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
+                          height: 1.2,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 2),
                       Text(
                         module['subtitle'],
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.9),
-                          fontSize: 14,
+                          fontSize: 12,
+                          height: 1.2,
                         ),
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: 8),
                       Row(
                         children: [
-                          Text(
-                            module['available'] ? 'Acceder' : 'En desarrollo',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
+                          Expanded(
+                            child: Text(
+                              module['available'] ? 'Acceder' : 'En desarrollo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           SizedBox(width: 4),
