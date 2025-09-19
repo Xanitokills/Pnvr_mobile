@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Sistema de Inspección',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Roboto'),
       home: LoginScreen(),
