@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
 
-// Pantalla Módulo Expediente
-class ExpedienteScreen extends StatefulWidget {
+// Pantalla Módulo Trackeo
+class TrackeoScreen extends StatefulWidget {
   @override
-  _ExpedienteScreenState createState() => _ExpedienteScreenState();
+  _TrackeoScreenState createState() => _TrackeoScreenState();
 }
 
-class _ExpedienteScreenState extends State<ExpedienteScreen>
+class _TrackeoScreenState extends State<TrackeoScreen> 
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 800),
+      duration: Duration(milliseconds: 1000),
       vsync: this,
     );
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0, 0.5),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController, 
+      curve: Curves.easeOutBack,
+    ));
     _animationController.forward();
   }
 
@@ -61,9 +69,9 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.green.shade700,
-                      Colors.green.shade500,
-                      Colors.green.shade300,
+                      Colors.blue.shade700,
+                      Colors.blue.shade500,
+                      Colors.blue.shade300,
                     ],
                   ),
                 ),
@@ -86,14 +94,14 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Icon(
-                                  Icons.folder_outlined,
+                                  Icons.track_changes,
                                   color: Colors.white,
                                   size: 32,
                                 ),
                               ),
                               SizedBox(height: 16),
                               Text(
-                                'Módulo Expediente',
+                                'Módulo Trackeo',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 24,
@@ -101,7 +109,7 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
                                 ),
                               ),
                               Text(
-                                'Gestión de documentos y formularios',
+                                'Seguimiento y monitoreo de rutas',
                                 style: TextStyle(
                                   color: Colors.white.withOpacity(0.9),
                                   fontSize: 16,
@@ -132,103 +140,105 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
           ),
           // Welcome Section
           SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.all(24),
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Selecciona tu formulario',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade800,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: Container(
+                margin: EdgeInsets.all(24),
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Selecciona el tipo de tracking',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade800,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'Gestiona documentos y procesos',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
+                          SizedBox(height: 4),
+                          Text(
+                            'Elige la ruta que deseas rastrear',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade600,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade50,
-                      borderRadius: BorderRadius.circular(12),
+                    Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.location_on,
+                        color: Colors.blue.shade600,
+                        size: 24,
+                      ),
                     ),
-                    child: Icon(
-                      Icons.description,
-                      color: Colors.green.shade600,
-                      size: 24,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-          // Forms Section
+          // Tracking Options Section
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 24),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                Text(
-                  'Formularios Disponibles',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade800,
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Text(
+                    'Opciones de Tracking',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade800,
+                    ),
                   ),
                 ),
-                SizedBox(height: 16),
-                _buildModernFormCard(
-                  context,
-                  'Trackeo',
-                  'Seguimiento y monitoreo de procesos',
-                  Icons.track_changes,
-                  Colors.blue,
-                  true,
-                  () => Navigator.pushNamed(context, '/trackeo'),
+                SizedBox(height: 20),
+                SlideTransition(
+                  position: _slideAnimation,
+                  child: _buildTrackingOptionCard(
+                    context,
+                    'Vivienda a Cantera',
+                    'Tracking desde punto de vivienda hasta cantera',
+                    Icons.home_outlined,
+                    Icons.landscape_outlined,
+                    Colors.green,
+                    () => _navigateToTrackingForm(context, 'vivienda_cantera'),
+                  ),
                 ),
-                SizedBox(height: 16),
-                _buildModernFormCard(
-                  context,
-                  'Inspección',
-                  'Crear nueva inspección técnica',
-                  Icons.assignment_outlined,
-                  Colors.orange,
-                  true,
-                  () => Navigator.pushNamed(context, '/inspeccion'),
-                ),
-                SizedBox(height: 16),
-                _buildModernFormCard(
-                  context,
-                  'Inspecciones Realizadas',
-                  'Ver historial de inspecciones',
-                  Icons.list_alt_outlined,
-                  Colors.purple,
-                  true,
-                  () => Navigator.pushNamed(context, '/inspecciones-list'),
+                SizedBox(height: 20),
+                SlideTransition(
+                  position: _slideAnimation,
+                  child: _buildTrackingOptionCard(
+                    context,
+                    'Vivienda a Carretera',
+                    'Tracking desde vivienda hasta punto de carretera',
+                    Icons.home_outlined,
+                    Icons.route_outlined,
+                    Colors.purple,
+                    () => _navigateToTrackingForm(context, 'vivienda_carretera'),
+                  ),
                 ),
                 SizedBox(height: 100), // Bottom spacing
               ]),
@@ -239,13 +249,13 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
     );
   }
 
-  Widget _buildModernFormCard(
+  Widget _buildTrackingOptionCard(
     BuildContext context,
     String title,
     String subtitle,
-    IconData icon,
+    IconData startIcon,
+    IconData endIcon,
     Color color,
-    bool available,
     VoidCallback onTap,
   ) {
     return Container(
@@ -254,8 +264,8 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
-            blurRadius: 12,
-            offset: Offset(0, 6),
+            blurRadius: 15,
+            offset: Offset(0, 8),
           ),
         ],
       ),
@@ -274,83 +284,105 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
                 colors: [color, color.withOpacity(0.8)],
               ),
             ),
-            child: Row(
+            child: Column(
               children: [
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Icon(icon, size: 32, color: Colors.white),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              title,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if (!available)
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                'Próximamente',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                        ],
+                // Icons Row with Arrow
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      child: Icon(startIcon, size: 32, color: Colors.white),
+                    ),
+                    SizedBox(width: 20),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      SizedBox(height: 12),
-                      Row(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
+                          Icon(Icons.arrow_forward, color: Colors.white, size: 20),
+                          SizedBox(width: 4),
                           Text(
-                            available ? 'Acceder' : 'En desarrollo',
+                            'TRACKING',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
                             ),
                           ),
-                          SizedBox(width: 4),
-                          Icon(
-                            available ? Icons.arrow_forward : Icons.schedule,
-                            color: Colors.white,
-                            size: 16,
-                          ),
                         ],
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Icon(endIcon, size: 32, color: Colors.white),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                // Title and Description
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 16),
+                // Action Button
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(25),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Iniciar Tracking',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Icon(
+                        Icons.play_arrow,
+                        color: Colors.white,
+                        size: 18,
                       ),
                     ],
                   ),
@@ -363,15 +395,24 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
     );
   }
 
-  void _showComingSoonSnackBar(BuildContext context, String feature) {
+  void _navigateToTrackingForm(BuildContext context, String trackingType) {
+    // Aquí navegarías al formulario específico de tracking
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$feature - Próximamente disponible'),
-        backgroundColor: Colors.orange.shade600,
+        content: Text('Iniciando tracking: ${trackingType.replaceAll('_', ' a ')}'),
+        backgroundColor: Colors.blue.shade600,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        action: SnackBarAction(
+          label: 'OK',
+          textColor: Colors.white,
+          onPressed: () {},
+        ),
       ),
     );
+    
+    // Ejemplo de navegación futura:
+    // Navigator.pushNamed(context, '/tracking-form', arguments: trackingType);
   }
 
   void _showProfileDialog(BuildContext context) {
@@ -388,7 +429,7 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Colors.green.shade600, Colors.green.shade400],
+              colors: [Colors.blue.shade600, Colors.blue.shade400],
             ),
           ),
           child: Column(
@@ -436,10 +477,10 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
                     Navigator.pop(context);
                     Navigator.pushReplacementNamed(context, '/login');
                   },
-                  icon: Icon(Icons.logout, color: Colors.green.shade600),
+                  icon: Icon(Icons.logout, color: Colors.blue.shade600),
                   label: Text(
                     'Cerrar Sesión',
-                    style: TextStyle(color: Colors.green.shade600),
+                    style: TextStyle(color: Colors.blue.shade600),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -489,6 +530,17 @@ class _ExpedienteScreenState extends State<ExpedienteScreen>
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _showComingSoonSnackBar(BuildContext context, String feature) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$feature - Próximamente disponible'),
+        backgroundColor: Colors.orange.shade600,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }

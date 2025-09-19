@@ -5,6 +5,7 @@ import 'package:pnvr/inspecciones_list.dart';
 import 'package:pnvr/loginScreen.dart';
 import 'package:pnvr/menu.dart';
 import 'package:pnvr/moduloexp.dart';
+import 'package:pnvr/trackeo_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/menu': (context) => MenuScreen(),
         '/expediente': (context) => ExpedienteScreen(),
+        '/trackeo': (context) => TrackeoScreen(),
         '/inspeccion': (context) => InspeccionFormScreen(),
         '/inspecciones-list': (context) => InspeccionesListScreen(),
       },
